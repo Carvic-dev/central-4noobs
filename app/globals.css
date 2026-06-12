@@ -3,6 +3,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --he4rt-bg: #120622;
+  --he4rt-bg-soft: #fbf7ff;
+  --he4rt-card: #ffffff;
+  --he4rt-ink: #1f1230;
+  --he4rt-muted: #dfcef4;
+  --he4rt-purple: #6d28d9;
+  --he4rt-purple-deep: #3b0f75;
+  --he4rt-purple-soft: #efe5ff;
+  --he4rt-pink: #e83e8c;
+  --he4rt-pink-soft: #ffe5f2;
+  --he4rt-border: #e4d3ff;
 }
 
 @theme inline {

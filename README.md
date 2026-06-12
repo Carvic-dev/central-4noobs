@@ -1,36 +1,202 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Central 4Noobs
 
-## Getting Started
+Hub de conteúdos da **4Noobs**, criado para centralizar materiais, trilhas, links, projetos, guias e recursos úteis para quem está aprendendo tecnologia.
 
-First, run the development server:
+> Projeto em desenvolvimento.
+
+## 📌 Sobre o projeto
+
+A **Central 4Noobs** tem como objetivo reunir conteúdos educacionais de forma simples, organizada e acessível. A ideia é facilitar o acesso a materiais para iniciantes, estudantes e pessoas que querem evoluir na área de tecnologia.
+
+## 🚀 Tecnologias utilizadas
+
+Este projeto foi desenvolvido com:
+
+- [Next.js](https://nextjs.org/)
+- [React](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [ESLint](https://eslint.org/)
+- [PostCSS](https://postcss.org/)
+
+## 📁 Estrutura do projeto
+
+```bash
+central-4noobs/
+├── app/
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── public/
+├── .gitignore
+├── eslint.config.mjs
+├── next.config.ts
+├── package.json
+├── package-lock.json
+├── postcss.config.mjs
+├── tsconfig.json
+└── README.md
+```
+
+## ✅ Pré-requisitos
+
+Antes de começar, você precisa ter instalado na sua máquina:
+
+- [Node.js](https://nodejs.org/) `20.9+`
+- [npm](https://www.npmjs.com/)
+- [Git](https://git-scm.com/)
+
+## 🧪 Como usar o projeto
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/Carvic-dev/central-4noobs.git
+```
+
+Acesse a pasta do projeto:
+
+```bash
+cd central-4noobs
+```
+
+Instale as dependências:
+
+```bash
+npm install
+```
+
+Inicie o servidor de desenvolvimento:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra o navegador em:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📜 Scripts disponíveis
 
-## Learn More
+No projeto, você pode executar:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Inicia o servidor de desenvolvimento.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run build
+```
 
-## Deploy on Vercel
+Gera a versão de produção da aplicação.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run start
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Executa a aplicação em modo de produção após o build.
+
+```bash
+npm run lint
+```
+
+Executa o ESLint para verificar problemas no código.
+
+## 🤝 Como contribuir
+
+Contribuições são bem-vindas! Para contribuir com o projeto:
+
+1. Faça um fork do repositório.
+2. Crie uma branch para sua alteração:
+
+```bash
+git checkout -b minha-contribuicao
+```
+
+3. Faça as alterações necessárias.
+4. Execute o lint para verificar o código:
+
+```bash
+npm run lint
+```
+
+5. Faça o commit das alterações:
+
+```bash
+git commit -m "feat: adiciona nova funcionalidade"
+```
+
+6. Envie sua branch para o GitHub:
+
+```bash
+git push origin minha-contribuicao
+```
+
+7. Abra um Pull Request explicando o que foi alterado.
+
+## 💡 Sugestões de contribuição
+
+Você pode contribuir com:
+
+- Novas páginas de conteúdo
+- Melhorias na interface
+- Correções de bugs
+- Organização de materiais
+- Melhorias de acessibilidade
+- Refatoração de código
+- Documentação
+- Novas trilhas de estudo
+- Links úteis para iniciantes
+
+## 🧭 Padrão recomendado de commits
+
+Este projeto pode seguir uma estrutura simples baseada em Conventional Commits:
+
+```bash
+feat: adiciona nova funcionalidade
+fix: corrige um problema
+docs: altera documentação
+style: altera estilos ou formatação
+refactor: refatora código sem alterar comportamento
+chore: tarefas de manutenção
+```
+
+Exemplos:
+
+```bash
+git commit -m "feat: adiciona seção de trilhas"
+git commit -m "docs: atualiza instruções de instalação"
+git commit -m "fix: corrige layout da página inicial"
+```
+
+## 🛠️ Boas práticas para contribuir
+
+Antes de abrir um Pull Request:
+
+- Verifique se o projeto roda localmente.
+- Execute `npm run lint`.
+- Mantenha o código organizado e legível.
+- Use nomes claros para componentes, funções e arquivos.
+- Explique bem o objetivo da sua alteração no Pull Request.
+- Evite enviar alterações que não tenham relação com a proposta do PR.
+
+## 📦 Build para produção
+
+Para gerar uma versão de produção:
+
+```bash
+npm run build
+```
+
+Depois, para iniciar a aplicação em produção:
+
+```bash
+npm run start
+```
+
+Projeto mantido por **Carvic-dev** e pela comunidade do He4rtDevs e do projeto 4Noobs.

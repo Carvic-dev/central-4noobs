@@ -1,0 +1,39 @@
+name: Sincronizar materiais
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    name: Atualizar acervo 4noobs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Chamar endpoint de sincronizacao
+        env:
+          HUB_BASE_URL: ${{ secrets.HUB_BASE_URL }}
+          SYNC_SECRET: ${{ secrets.SYNC_SECRET }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "$HUB_BASE_URL" ]; then
+            echo "Configure o secret HUB_BASE_URL com a URL publica do app."
+            exit 1
+          fi
+
+          if [ -z "$SYNC_SECRET" ]; then
+            echo "Configure o secret SYNC_SECRET com o mesmo valor usado no deploy."
+            exit 1
+          fi
+
+          BASE_URL="${HUB_BASE_URL%/}"
+          response="$(
+            curl --fail --show-error --silent \
+              --request GET \
+              --header "Authorization: Bearer ${SYNC_SECRET}" \
+              "${BASE_URL}/api/sync"
+          )"
+
+          echo "$response"

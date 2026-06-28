@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { getDb } from "../../../db";
 import { materials } from "../../../db/schema";
 
@@ -10,6 +10,22 @@ type MaterialFromReadme = {
 
 const README_URL =
   "https://raw.githubusercontent.com/he4rt/4noobs/master/README.MD";
+
+function getAutomationToken(request: NextRequest) {
+  const authorization = request.headers.get("authorization");
+
+  if (authorization?.startsWith("Bearer ")) {
+    return authorization.slice("Bearer ".length).trim();
+  }
+
+  return request.headers.get("x-sync-secret")?.trim() ?? "";
+}
+
+function canRunAutomatedSync(request: NextRequest) {
+  const syncSecret = process.env.SYNC_SECRET;
+
+  return Boolean(syncSecret) && getAutomationToken(request) === syncSecret;
+}
 
 function extractMarkdownLink(value: string) {
   const match = value.match(/\[([^\]]+)\]\(([^)]+)\)/);
@@ -87,7 +103,7 @@ function parseMaterialsFromReadme(markdown: string): MaterialFromReadme[] {
   return parsedMaterials;
 }
 
-export async function POST() {
+async function syncMaterials(source: "manual" | "automatica") {
   try {
     const db = getDb();
     const timeoutSignal = AbortSignal.timeout(30_000);
@@ -120,6 +136,7 @@ export async function POST() {
 
     return NextResponse.json({
       message: "Sincronizacao concluida com sucesso!",
+      origem: source,
       totalEncontrado: formattedData.length,
     });
   } catch (error) {
@@ -148,4 +165,21 @@ export async function POST() {
   }
 }
 
-export const GET = POST;
+export async function POST() {
+  return syncMaterials("manual");
+}
+
+export async function GET(request: NextRequest) {
+  if (!canRunAutomatedSync(request)) {
+    return NextResponse.json(
+      {
+        error: "Nao autorizado",
+        detalhes:
+          "Configure SYNC_SECRET no deploy e envie Authorization: Bearer <secret>.",
+      },
+      { status: 401 },
+    );
+  }
+
+  return syncMaterials("automatica");
+}

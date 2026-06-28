@@ -1,7 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  MATERIAL_SEARCH_SET_EVENT,
+  MATERIAL_SEARCH_SYNC_EVENT,
+  type MaterialSearchEventDetail,
+} from "./material-search-events";
 
 export type MaterialItem = {
   id: number;
@@ -44,12 +49,12 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
   "acessibilidade na web": {
     area: "Design e produto",
     format: "Conceito essencial",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   angular: {
     area: "Web",
     format: "Framework para praticar",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   appium: {
     area: "Qualidade",
@@ -69,7 +74,7 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
   bash: {
     area: "DevOps e ambiente",
     format: "Curso de linguagem",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   c: {
     area: "Fundamentos",
@@ -84,7 +89,7 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
   "c++": {
     area: "Fundamentos",
     format: "Curso de linguagem",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   clojure: {
     area: "Fundamentos",
@@ -104,7 +109,7 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
   cypress: {
     area: "Qualidade",
     format: "Ferramenta do dia a dia",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   dart: {
     area: "Mobile",
@@ -113,18 +118,18 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
   },
   devops: {
     area: "DevOps e ambiente",
-    format: "Area para conhecer",
-    level: "Proximo passo",
+    format: "Área para conhecer",
+    level: "Próximo passo",
   },
   django: {
     area: "Back-end",
     format: "Framework para praticar",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   docker: {
     area: "DevOps e ambiente",
     format: "Ferramenta do dia a dia",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   elixir: {
     area: "Fundamentos",
@@ -134,7 +139,7 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
   flutter: {
     area: "Mobile",
     format: "Framework para praticar",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   git: {
     area: "Ferramentas",
@@ -144,12 +149,12 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
   go: {
     area: "Back-end",
     format: "Curso de linguagem",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   graphql: {
     area: "Back-end",
     format: "Conceito essencial",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   haskell: {
     area: "Fundamentos",
@@ -183,13 +188,13 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
   },
   lpi: {
     area: "Carreira",
-    format: "Certificacao",
+    format: "Certificação",
     level: "Depois que praticar",
   },
   maestro: {
     area: "Qualidade",
     format: "Ferramenta do dia a dia",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   "making languages": {
     area: "Fundamentos",
@@ -214,12 +219,12 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
   nestjs: {
     area: "Back-end",
     format: "Framework para praticar",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   nextjs: {
     area: "Web",
     format: "Framework para praticar",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   obsidian: {
     area: "Ferramentas",
@@ -239,7 +244,7 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
   playwright: {
     area: "Qualidade",
     format: "Ferramenta do dia a dia",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   poo: {
     area: "Fundamentos",
@@ -258,23 +263,23 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
   },
   qa: {
     area: "Qualidade",
-    format: "Area para conhecer",
+    format: "Área para conhecer",
     level: "Comece aqui",
   },
   r: {
     area: "Dados",
     format: "Curso de linguagem",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   redis: {
     area: "Dados",
     format: "Banco de dados",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   regex: {
     area: "Fundamentos",
     format: "Conceito essencial",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   "rest assured": {
     area: "Qualidade",
@@ -294,12 +299,12 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
   selenium: {
     area: "Qualidade",
     format: "Ferramenta do dia a dia",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   spring: {
     area: "Back-end",
     format: "Framework para praticar",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   sql: {
     area: "Dados",
@@ -314,27 +319,27 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
   typescript: {
     area: "Web",
     format: "Curso de linguagem",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   ui: {
     area: "Design e produto",
-    format: "Area para conhecer",
+    format: "Área para conhecer",
     level: "Comece aqui",
   },
   ux: {
     area: "Design e produto",
-    format: "Area para conhecer",
+    format: "Área para conhecer",
     level: "Comece aqui",
   },
   vim: {
     area: "Ferramentas",
     format: "Ferramenta do dia a dia",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   vue: {
     area: "Web",
     format: "Framework para praticar",
-    level: "Proximo passo",
+    level: "Próximo passo",
   },
   wm: {
     area: "DevOps e ambiente",
@@ -356,14 +361,14 @@ const materialTaxonomy: Record<string, MaterialMeta> = {
 const roadmaps: Roadmap[] = [
   {
     id: "comece-aqui",
-    title: "Comece aqui",
-    description: "Base curta para ganhar familiaridade com codigo, web e Git.",
+    title: "Primeiros passos",
+    description: "Uma base leve para se acostumar com código, web e Git.",
     items: ["html", "css", "javascript", "git", "markdown"],
   },
   {
     id: "web-front",
     title: "Web front-end",
-    description: "Do HTML ate frameworks, com UI e acessibilidade no caminho.",
+    description: "Do HTML aos frameworks, passando por UI e acessibilidade.",
     items: [
       "html",
       "css",
@@ -380,7 +385,7 @@ const roadmaps: Roadmap[] = [
   {
     id: "backend",
     title: "Back-end",
-    description: "Linguagem, dados, API e ambiente para publicar projetos.",
+    description: "Linguagens, dados, APIs e ambiente para criar projetos.",
     items: [
       "git",
       "javascript",
@@ -396,13 +401,13 @@ const roadmaps: Roadmap[] = [
   {
     id: "dados",
     title: "Dados",
-    description: "Comece por SQL e avance para bancos e analise com calma.",
+    description: "Comece por SQL e avance para bancos e análise com calma.",
     items: ["sql", "mysql", "postgresql", "mongodb", "redis", "python", "r"],
   },
   {
     id: "qualidade",
     title: "Testes e QA",
-    description: "Da ideia de qualidade ate automacao web, mobile e APIs.",
+    description: "Da ideia de qualidade à automação web, mobile e APIs.",
     items: [
       "qa",
       "selenium",
@@ -416,7 +421,7 @@ const roadmaps: Roadmap[] = [
   {
     id: "devops",
     title: "Ambiente e DevOps",
-    description: "Prepare sua maquina, terminal, containers e fundamentos Linux.",
+    description: "Prepare sua máquina, terminal, containers e Linux.",
     items: ["linux", "wsl2", "bash", "git", "docker", "devops", "vim", "lpi"],
   },
   {
@@ -427,7 +432,52 @@ const roadmaps: Roadmap[] = [
   },
 ];
 
-const levelOrder = ["Comece aqui", "Proximo passo", "Depois que praticar", "Pendente"];
+const levelOrder = [
+  "Comece aqui",
+  "Próximo passo",
+  "Depois que praticar",
+  "Pendente",
+];
+
+const levelPresentation: Record<
+  string,
+  {
+    className: string;
+    description: string;
+    label: string;
+  }
+> = {
+  "Comece aqui": {
+    className: "bg-[#dcfce7] text-[#166534] ring-[#86efac]",
+    description: "boa porta de entrada",
+    label: "Iniciante",
+  },
+  "Próximo passo": {
+    className: "bg-[#fef3c7] text-[#92400e] ring-[#fcd34d]",
+    description: "para continuar praticando",
+    label: "Mediano",
+  },
+  "Depois que praticar": {
+    className: "bg-[#fee2e2] text-[#991b1b] ring-[#fca5a5]",
+    description: "para aprofundar",
+    label: "Avançado",
+  },
+  Pendente: {
+    className: "bg-[#f3f4f6] text-[#4b5563] ring-[#d1d5db]",
+    description: "ainda sem classificação",
+    label: "A classificar",
+  },
+};
+
+function getLevelPresentation(level: string) {
+  return (
+    levelPresentation[level] ?? {
+      className: "bg-[#f3f4f6] text-[#4b5563] ring-[#d1d5db]",
+      description: "nível personalizado",
+      label: level,
+    }
+  );
+}
 
 function normalize(value: string) {
   return value
@@ -509,7 +559,7 @@ export function MaterialsExplorer({ materials }: { materials: MaterialItem[] }) 
   const [query, setQuery] = useState("");
   const [selectedArea, setSelectedArea] = useState("Todas as areas");
   const [selectedFormat, setSelectedFormat] = useState("Todos os formatos");
-  const [selectedLevel, setSelectedLevel] = useState("Todos os momentos");
+  const [selectedLevel, setSelectedLevel] = useState("Todos os níveis");
   const [selectedRoadmapId, setSelectedRoadmapId] = useState("comece-aqui");
 
   const enrichedMaterials = useMemo(
@@ -525,6 +575,30 @@ export function MaterialsExplorer({ materials }: { materials: MaterialItem[] }) 
   const activeRoadmap = roadmaps.find(
     (roadmap) => roadmap.id === selectedRoadmapId,
   );
+
+  useEffect(() => {
+    function handleNavbarSearch(event: Event) {
+      const detail = (event as CustomEvent<MaterialSearchEventDetail>).detail;
+
+      if (typeof detail?.query === "string") {
+        setQuery(detail.query);
+      }
+    }
+
+    window.addEventListener(MATERIAL_SEARCH_SET_EVENT, handleNavbarSearch);
+
+    return () => {
+      window.removeEventListener(MATERIAL_SEARCH_SET_EVENT, handleNavbarSearch);
+    };
+  }, []);
+
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent<MaterialSearchEventDetail>(MATERIAL_SEARCH_SYNC_EVENT, {
+        detail: { query },
+      }),
+    );
+  }, [query]);
 
   const areaOptions = useMemo(
     () =>
@@ -545,11 +619,12 @@ export function MaterialsExplorer({ materials }: { materials: MaterialItem[] }) 
   );
 
   const levelOptions = useMemo(
-    () =>
-      buildOptions(
-        enrichedMaterials.map((material) => material.level),
-        "Todos os momentos",
+    () => [
+      "Todos os níveis",
+      ...levelOrder.filter((level) =>
+        enrichedMaterials.some((material) => material.level === level),
       ),
+    ],
     [enrichedMaterials],
   );
 
@@ -564,7 +639,7 @@ export function MaterialsExplorer({ materials }: { materials: MaterialItem[] }) 
       const matchesQuery =
         !hasQuery ||
         normalize(
-          `${material.title} ${material.description} ${material.area} ${material.format} ${material.level} ${material.author?.name ?? ""}`,
+          `${material.title} ${material.description} ${material.area} ${material.format} ${material.level} ${getLevelPresentation(material.level).label} ${material.author?.name ?? ""}`,
         ).includes(normalizedQuery);
       const matchesArea =
         selectedArea === "Todas as areas" || material.area === selectedArea;
@@ -572,7 +647,7 @@ export function MaterialsExplorer({ materials }: { materials: MaterialItem[] }) 
         selectedFormat === "Todos os formatos" ||
         material.format === selectedFormat;
       const matchesLevel =
-        selectedLevel === "Todos os momentos" ||
+        selectedLevel === "Todos os níveis" ||
         material.level === selectedLevel;
 
       return (
@@ -607,72 +682,57 @@ export function MaterialsExplorer({ materials }: { materials: MaterialItem[] }) 
     Number(selectedRoadmapId !== "all") +
     Number(selectedArea !== "Todas as areas") +
     Number(selectedFormat !== "Todos os formatos") +
-    Number(selectedLevel !== "Todos os momentos") +
+    Number(selectedLevel !== "Todos os níveis") +
     Number(query.trim().length > 0);
 
   function clearFilters() {
     setQuery("");
     setSelectedArea("Todas as areas");
     setSelectedFormat("Todos os formatos");
-    setSelectedLevel("Todos os momentos");
+    setSelectedLevel("Todos os níveis");
     setSelectedRoadmapId("all");
   }
 
   return (
     <div className="space-y-8">
-      <section className="space-y-3">
+      <section className="space-y-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#7d6aa8]">
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--he4rt-purple)]">
               Trilhas sugeridas
             </p>
-            <h2 className="mt-1 text-2xl font-bold text-[#2f2446]">
-              Caminhos para nao ficar perdido
+            <h2 className="mt-1 text-2xl font-bold text-[var(--he4rt-ink)]">
+              Escolha uma trilha para começar
             </h2>
           </div>
-          <button
-            type="button"
-            onClick={() => setSelectedRoadmapId("all")}
-            className={
-              selectedRoadmapId === "all"
-                ? "h-10 rounded-md bg-[#6f5aa8] px-4 text-sm font-semibold text-white shadow-sm"
-                : "h-10 rounded-md border border-[#dfd4f4] bg-white/80 px-4 text-sm font-semibold text-[#5f4b8b] transition hover:border-[#b9a7dc] hover:bg-[#faf7ff]"
-            }
-          >
-            Ver todos
-          </button>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <RoadmapCard
+            active={selectedRoadmapId === "all"}
+            description="Veja todos os materiais sincronizados em uma única lista."
+            meta={`${materials.length} materiais`}
+            onSelect={() => setSelectedRoadmapId("all")}
+            title="Todo o acervo"
+          />
+
           {roadmaps.map((roadmap) => (
-            <button
+            <RoadmapCard
               key={roadmap.id}
-              type="button"
-              onClick={() => setSelectedRoadmapId(roadmap.id)}
-              className={
-                selectedRoadmapId === roadmap.id
-                  ? "min-h-[132px] rounded-lg border border-[#b9a7dc] bg-[#f1e9ff] p-4 text-left shadow-sm shadow-[#6f5aa8]/10"
-                  : "min-h-[132px] rounded-lg border border-[#eee7f8] bg-white/80 p-4 text-left shadow-sm shadow-[#6f5aa8]/5 transition hover:-translate-y-0.5 hover:border-[#d6c8ef] hover:bg-[#fbf8ff]"
-              }
-            >
-              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#8d7ab4]">
-                {roadmap.items.length} passos
-              </span>
-              <strong className="mt-2 block text-lg text-[#2f2446]">
-                {roadmap.title}
-              </strong>
-              <span className="mt-2 block text-sm leading-5 text-[#6f627f]">
-                {roadmap.description}
-              </span>
-            </button>
+              active={selectedRoadmapId === roadmap.id}
+              description={roadmap.description}
+              meta={`${roadmap.items.length} passos`}
+              onSelect={() => setSelectedRoadmapId(roadmap.id)}
+              title={roadmap.title}
+            />
           ))}
         </div>
       </section>
 
-      <section className="rounded-lg border border-[#e4d8f4] bg-white/85 p-4 shadow-sm shadow-[#6f5aa8]/5 backdrop-blur sm:p-5">
+      <section className="rounded-lg border border-[var(--he4rt-border)] bg-white p-4 shadow-sm backdrop-blur sm:p-5">
         <div className="grid gap-4 xl:grid-cols-[minmax(220px,1fr)_180px_210px_190px_auto] xl:items-end">
           <label className="block">
-            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7d6aa8]">
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--he4rt-purple)]">
               Buscar
             </span>
             <input
@@ -680,18 +740,18 @@ export function MaterialsExplorer({ materials }: { materials: MaterialItem[] }) 
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Python, HTML, Git, testes..."
-              className="mt-2 h-11 w-full rounded-md border border-[#dfd4f4] bg-[#fbf8ff] px-3 text-sm text-[#2f2446] outline-none transition placeholder:text-[#9a8eb1] focus:border-[#8d7ab4] focus:bg-white focus:ring-4 focus:ring-[#eee7f8]"
+              className="mt-2 h-11 w-full rounded-md border border-[var(--he4rt-border)] bg-[var(--he4rt-bg-soft)] px-3 text-sm text-[var(--he4rt-ink)] outline-none transition placeholder:text-[#9a8eb1] focus:border-[var(--he4rt-purple)] focus:bg-white focus:ring-4 focus:ring-[var(--he4rt-purple-soft)]"
             />
           </label>
 
           <label className="block">
-            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7d6aa8]">
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--he4rt-purple)]">
               Area
             </span>
             <select
               value={selectedArea}
               onChange={(event) => setSelectedArea(event.target.value)}
-              className="mt-2 h-11 w-full rounded-md border border-[#dfd4f4] bg-[#fbf8ff] px-3 text-sm font-medium text-[#2f2446] outline-none transition focus:border-[#8d7ab4] focus:bg-white focus:ring-4 focus:ring-[#eee7f8]"
+              className="mt-2 h-11 w-full rounded-md border border-[var(--he4rt-border)] bg-[var(--he4rt-bg-soft)] px-3 text-sm font-medium text-[var(--he4rt-ink)] outline-none transition focus:border-[var(--he4rt-purple)] focus:bg-white focus:ring-4 focus:ring-[var(--he4rt-purple-soft)]"
             >
               {areaOptions.map((area) => (
                 <option key={area} value={area}>
@@ -702,13 +762,13 @@ export function MaterialsExplorer({ materials }: { materials: MaterialItem[] }) 
           </label>
 
           <label className="block">
-            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7d6aa8]">
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--he4rt-purple)]">
               Formato
             </span>
             <select
               value={selectedFormat}
               onChange={(event) => setSelectedFormat(event.target.value)}
-              className="mt-2 h-11 w-full rounded-md border border-[#dfd4f4] bg-[#fbf8ff] px-3 text-sm font-medium text-[#2f2446] outline-none transition focus:border-[#8d7ab4] focus:bg-white focus:ring-4 focus:ring-[#eee7f8]"
+              className="mt-2 h-11 w-full rounded-md border border-[var(--he4rt-border)] bg-[var(--he4rt-bg-soft)] px-3 text-sm font-medium text-[var(--he4rt-ink)] outline-none transition focus:border-[var(--he4rt-purple)] focus:bg-white focus:ring-4 focus:ring-[var(--he4rt-purple-soft)]"
             >
               {formatOptions.map((format) => (
                 <option key={format} value={format}>
@@ -719,17 +779,17 @@ export function MaterialsExplorer({ materials }: { materials: MaterialItem[] }) 
           </label>
 
           <label className="block">
-            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7d6aa8]">
-              Momento
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--he4rt-purple)]">
+              Nível
             </span>
             <select
               value={selectedLevel}
               onChange={(event) => setSelectedLevel(event.target.value)}
-              className="mt-2 h-11 w-full rounded-md border border-[#dfd4f4] bg-[#fbf8ff] px-3 text-sm font-medium text-[#2f2446] outline-none transition focus:border-[#8d7ab4] focus:bg-white focus:ring-4 focus:ring-[#eee7f8]"
+              className="mt-2 h-11 w-full rounded-md border border-[var(--he4rt-border)] bg-[var(--he4rt-bg-soft)] px-3 text-sm font-medium text-[var(--he4rt-ink)] outline-none transition focus:border-[var(--he4rt-purple)] focus:bg-white focus:ring-4 focus:ring-[var(--he4rt-purple-soft)]"
             >
               {levelOptions.map((level) => (
                 <option key={level} value={level}>
-                  {level}
+                  {getLevelPresentation(level).label}
                 </option>
               ))}
             </select>
@@ -739,22 +799,37 @@ export function MaterialsExplorer({ materials }: { materials: MaterialItem[] }) 
             type="button"
             onClick={clearFilters}
             disabled={activeFilters === 0}
-            className="h-11 rounded-md border border-[#dfd4f4] px-4 text-sm font-semibold text-[#5f4b8b] transition hover:border-[#b9a7dc] hover:bg-[#faf7ff] disabled:cursor-not-allowed disabled:border-[#ece7f3] disabled:text-[#b9aec8] disabled:hover:bg-transparent"
+            className="h-11 rounded-md border border-[var(--he4rt-border)] px-4 text-sm font-semibold text-[var(--he4rt-purple-deep)] transition hover:border-[var(--he4rt-purple)] hover:bg-[var(--he4rt-purple-soft)] disabled:cursor-not-allowed disabled:border-[#ece7f3] disabled:text-[#b9aec8] disabled:hover:bg-transparent"
           >
             Limpar
           </button>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-[#6f627f]">
-          <strong className="text-[#2f2446]">{filteredMaterials.length}</strong>
-          <span>de {materials.length} materiais visiveis</span>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {levelOrder.slice(0, 3).map((level) => {
+            const levelInfo = getLevelPresentation(level);
+
+            return (
+              <span
+                key={level}
+                className={`inline-flex rounded-md px-3 py-1.5 text-xs font-semibold ring-1 ring-inset ${levelInfo.className}`}
+              >
+                {levelInfo.label}: {levelInfo.description}
+              </span>
+            );
+          })}
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-[var(--he4rt-muted)]">
+          <strong className="text-[var(--he4rt-ink)]">{filteredMaterials.length}</strong>
+          <span>de {materials.length} materiais visíveis</span>
           {activeRoadmap ? (
-            <span className="rounded-md bg-[#ede6ff] px-2 py-1 text-xs font-semibold text-[#5f4b8b]">
+            <span className="rounded-md bg-[var(--he4rt-purple-soft)] px-2 py-1 text-xs font-semibold text-[var(--he4rt-purple-deep)]">
               {activeRoadmap.title}
             </span>
           ) : null}
           {searchIgnoresRoadmap ? (
-            <span className="rounded-md bg-[#ffe7f4] px-2 py-1 text-xs font-semibold text-[#9f2d68]">
+            <span className="rounded-md bg-[var(--he4rt-pink-soft)] px-2 py-1 text-xs font-semibold text-[var(--he4rt-pink)]">
               busca em todo o acervo
             </span>
           ) : null}
@@ -767,18 +842,18 @@ export function MaterialsExplorer({ materials }: { materials: MaterialItem[] }) 
       </section>
 
       {filteredMaterials.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-[#d6c8ef] bg-white/85 p-8">
-          <h2 className="text-2xl font-semibold text-[#2f2446]">
+        <div className="rounded-lg border border-dashed border-[var(--he4rt-border)] bg-white/85 p-8">
+          <h2 className="text-2xl font-semibold text-[var(--he4rt-ink)]">
             Nenhum material encontrado
           </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-[#6f627f]">
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--he4rt-muted)]">
             Tente uma busca mais simples ou veja todo o acervo para retomar a
-            exploracao.
+            exploração.
           </p>
         </div>
       ) : null}
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {filteredMaterials.map((material) => (
           <MaterialCard
             key={material.id}
@@ -795,6 +870,52 @@ export function MaterialsExplorer({ materials }: { materials: MaterialItem[] }) 
   );
 }
 
+function RoadmapCard({
+  active,
+  description,
+  meta,
+  onSelect,
+  title,
+}: {
+  active: boolean;
+  description: string;
+  meta: string;
+  onSelect: () => void;
+  title: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      className={
+        active
+          ? "min-h-[150px] rounded-lg border border-[var(--he4rt-purple)] bg-[var(--he4rt-purple-deep)] p-4 text-left text-white shadow-lg shadow-[var(--he4rt-purple)]/15"
+          : "min-h-[150px] rounded-lg border border-[var(--he4rt-border)] bg-white p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-[var(--he4rt-purple)] hover:bg-[var(--he4rt-purple-soft)]"
+      }
+    >
+      <span
+        className={
+          active
+            ? "text-xs font-semibold uppercase tracking-[0.14em] text-[var(--he4rt-pink)]"
+            : "text-xs font-semibold uppercase tracking-[0.14em] text-[var(--he4rt-purple)]"
+        }
+      >
+        {meta}
+      </span>
+      <strong className="mt-2 block text-lg leading-tight">{title}</strong>
+      <span
+        className={
+          active
+            ? "mt-2 block text-sm leading-5 text-[var(--he4rt-muted-invert)]"
+            : "mt-2 block text-sm leading-5 text-[var(--he4rt-muted)]"
+        }
+      >
+        {description}
+      </span>
+    </button>
+  );
+}
+
 function MaterialCard({
   material,
   step,
@@ -802,64 +923,57 @@ function MaterialCard({
   material: EnrichedMaterial;
   step: number | null;
 }) {
-  const isPending =
-    material.area === "Pendente" ||
-    material.format === "Pendente" ||
-    material.level === "Pendente";
+  const levelInfo = getLevelPresentation(material.level);
 
   return (
-    <article className="group flex min-h-[286px] flex-col rounded-lg border border-[#eee7f8] bg-white p-5 shadow-sm shadow-[#6f5aa8]/5 transition hover:-translate-y-0.5 hover:border-[#d6c8ef] hover:shadow-lg hover:shadow-[#6f5aa8]/10">
-      <div className="flex items-start justify-between gap-3">
+    <article className="group flex min-h-[330px] flex-col rounded-lg border border-[var(--he4rt-border)] bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[var(--he4rt-purple)] hover:shadow-lg">
+      <div className="min-w-0">
         <div className="flex flex-wrap gap-2">
+          <span className="rounded-md bg-[var(--he4rt-bg)] px-2.5 py-1 text-xs font-semibold text-white">
+            {material.area}
+          </span>
           {step ? (
-            <span className="rounded-md bg-[#ece5ff] px-2.5 py-1 text-xs font-semibold text-[#5f4b8b]">
+            <span className="rounded-md bg-[var(--he4rt-pink-soft)] px-2.5 py-1 text-xs font-semibold text-[var(--he4rt-pink)]">
               Passo {step}
             </span>
           ) : null}
           <span
-            className={
-              isPending
-                ? "rounded-md bg-[#fff0cc] px-2.5 py-1 text-xs font-semibold text-[#765a13]"
-                : "rounded-md bg-[#f1e9ff] px-2.5 py-1 text-xs font-semibold text-[#5f4b8b]"
-            }
+            className={`rounded-md px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${levelInfo.className}`}
           >
-            {material.level}
+            {levelInfo.label}
           </span>
         </div>
-        <span className="rounded-md bg-[#e9f6f0] px-2.5 py-1 text-xs font-semibold text-[#2f6f58]">
-          {material.area}
-        </span>
+
+        <h2 className="mt-4 text-xl font-bold capitalize leading-tight text-[var(--he4rt-ink)]">
+          {formatTitle(material.title)}
+        </h2>
+
+        <p className="mt-2 text-sm font-semibold text-[var(--he4rt-purple)]">
+          {material.format}
+        </p>
+
+        <p className="mt-3 line-clamp-4 text-sm leading-6 text-[var(--he4rt-muted)]">
+          {material.description}
+        </p>
       </div>
 
-      <h2 className="mt-4 text-2xl font-bold capitalize leading-tight text-[#2f2446]">
-        {formatTitle(material.title)}
-      </h2>
-
-      <p className="mt-2 text-sm font-semibold text-[#7d6aa8]">
-        {material.format}
-      </p>
-
-      <p className="mt-3 line-clamp-3 text-sm leading-6 text-[#6f627f]">
-        {material.description}
-      </p>
-
-      <div className="mt-5 flex flex-col gap-4 border-t border-[#f0e8fa] pt-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-auto flex flex-col gap-4 border-t border-[var(--he4rt-border)] pt-4">
         {material.author ? (
           <a
             href={material.author.profileUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex min-w-0 items-center gap-3 text-sm text-[#6f627f] transition hover:text-[#4f3c7a]"
+            className="flex min-w-0 items-center gap-3 text-sm text-[var(--he4rt-muted)] transition hover:text-[var(--he4rt-purple-deep)]"
           >
             <Image
               src={material.author.avatarUrl}
               alt=""
               width={36}
               height={36}
-              className="h-9 w-9 shrink-0 rounded-full border border-[#e4d8f4] bg-[#fbf8ff]"
+              className="h-9 w-9 shrink-0 rounded-full border border-[var(--he4rt-border)] bg-[var(--he4rt-bg-soft)]"
             />
             <span className="min-w-0">
-              <span className="block text-xs font-medium text-[#9a8eb1]">
+              <span className="block text-xs font-medium text-[var(--he4rt-muted)]">
                 Autor no GitHub
               </span>
               <span className="block truncate font-semibold">
@@ -868,14 +982,16 @@ function MaterialCard({
             </span>
           </a>
         ) : (
-          <div className="text-sm text-[#9a8eb1]">Autor nao informado</div>
+          <div className="text-sm text-[var(--he4rt-muted)]">
+            Autor não informado
+          </div>
         )}
 
         <a
           href={material.githubUrl}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex h-10 shrink-0 items-center justify-center rounded-md bg-[#6f5aa8] px-4 text-sm font-semibold text-white transition hover:bg-[#5f4b8b] focus:outline-none focus:ring-4 focus:ring-[#e7ddfa]"
+          className="inline-flex h-10 w-full shrink-0 items-center justify-center rounded-md bg-[var(--he4rt-purple)] px-4 text-sm font-semibold text-white transition hover:bg-[var(--he4rt-purple-deep)] focus:outline-none focus:ring-4 focus:ring-[var(--he4rt-purple-soft)]"
         >
           Abrir material
         </a>

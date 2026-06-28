@@ -67,7 +67,7 @@ export function SyncButton() {
         type="button"
         onClick={handleSync}
         disabled={state === "loading"}
-        className="inline-flex h-11 items-center justify-center rounded-md bg-[#6f5aa8] px-5 text-sm font-semibold text-white shadow-sm shadow-[#6f5aa8]/20 transition hover:bg-[#5f4b8b] disabled:cursor-not-allowed disabled:bg-[#d6c8ef] disabled:text-[#7d6aa8]"
+        className="inline-flex h-11 items-center justify-center rounded-md bg-[var(--he4rt-pink)] px-5 text-sm font-semibold text-white shadow-sm shadow-black/20 transition hover:bg-[#c92d72] disabled:cursor-not-allowed disabled:bg-white/20 disabled:text-[var(--he4rt-muted-invert)]"
       >
         {buttonLabel}
       </button>
@@ -77,7 +77,7 @@ export function SyncButton() {
           className={
             state === "error"
               ? "text-sm text-red-700"
-              : "text-sm text-[#5f4b8b]"
+              : "text-sm text-[var(--he4rt-muted-invert)]"
           }
         >
           {message}
